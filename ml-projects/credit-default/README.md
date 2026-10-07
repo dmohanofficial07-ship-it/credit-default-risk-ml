@@ -62,6 +62,16 @@ This trains three models, prints validation and test results, and saves a
 chart to `ml-projects/credit-default/artifacts/evaluation.png`.
 You can also use **Terminal > Run Task > ML: train credit default model**.
 
+To display the saved accuracy, precision, recall, and error counts without
+retraining, run:
+
+```powershell
+.\.venv\Scripts\python.exe .\ml-projects\credit-default\report_results.py
+```
+
+The table compares the baseline, standard threshold, and recall-focused
+threshold. It labels ROC-AUC separately from accuracy.
+
 Score a real held-out example saved by training:
 
 ```powershell
