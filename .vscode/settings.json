@@ -1,0 +1,20 @@
+{
+  "editor.fontSize": 15,
+  "editor.lineNumbers": "on",
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.bracketPairColorization.enabled": true,
+  "workbench.editor.enablePreview": false,
+  "terminal.integrated.fontSize": 14,
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "files.exclude": {
+    "**/__pycache__": true,
+    ".tools": true,
+    ".venv": true
+  },
+  "search.exclude": {
+    ".tools": true,
+    ".venv": true,
+    "**/artifacts": true
+  }
+}

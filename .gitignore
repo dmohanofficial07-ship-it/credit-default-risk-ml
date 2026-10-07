@@ -1,0 +1,14 @@
+.venv/
+.tools/
+.qodo/
+.env
+.env.*
+!.env.example
+!.env.sample
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+ml-projects/*/artifacts/
+ml-projects/credit-default/data/
+ml-projects/credit-default/my_example.json
+debug.log
