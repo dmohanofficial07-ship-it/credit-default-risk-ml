@@ -51,17 +51,39 @@ def format_results(report):
     return "\n".join(lines)
 
 
+def format_experiment_results(report):
+    winner = next(item for item in report['candidates'] if item['config']['name'] == report['selected_model'])
+    lines = [
+        'CREDIT DEFAULT: ACCURACY EXPERIMENT',
+        f"Selected: {report['selected_model']} | CV accuracy: {winner['cv_accuracy_mean']:.2%}",
+        f"Development: {report['development_records']:,} | Test: {report['test_records']:,} | Purged: {report['purged_records']:,}",
+        f"Accuracy threshold from development predictions: {report['threshold']:.3f}", '',
+        f"{'Test setting':31} {'Accuracy':>10} {'Precision':>10} {'Recall':>10}",
+    ]
+    for label, metrics in report['test'].items():
+        lines.append(f"{label:31} {metrics['accuracy']:9.2%} {metrics['precision']:9.2%} {metrics['recall']:9.2%}")
+    difference = 100 * (report['test']['selected_accuracy_threshold']['accuracy'] - report['test']['reference_0_5']['accuracy'])
+    lines.extend(['', f'Accuracy difference vs equally trained reference: {difference:+.2f} percentage points.',
+                  'Feature/model/threshold choices used development data only.',
+                  'A small difference on this reused test set is not evidence of a reliable generalization gain.'])
+    return '\n'.join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--metrics", type=Path, default=ROOT / "artifacts" / "metrics.json")
+    choice = parser.add_mutually_exclusive_group()
+    choice.add_argument("--metrics", type=Path)
+    choice.add_argument("--experiment", action="store_true", help="Show the saved accuracy experiment.")
     args = parser.parse_args()
+    metrics_path = args.metrics or ROOT / 'artifacts' / ('accuracy_experiment/metrics.json' if args.experiment else 'metrics.json')
     try:
-        report = json.loads(args.metrics.read_text(encoding="utf-8"))
-        summary = format_results(report)
+        report = json.loads(metrics_path.read_text(encoding="utf-8"))
+        summary = format_experiment_results(report) if args.experiment else format_results(report)
     except (OSError, ValueError, KeyError, TypeError, IndexError) as exc:
-        parser.error(f"Cannot read evaluation results: {exc}. Run train.py to generate them.")
+        command = 'improve_accuracy.py' if args.experiment else 'train.py'
+        parser.error(f"Cannot read evaluation results: {exc}. Run {command} to generate them.")
     print(summary)
-    print(f"\nMetrics: {args.metrics.resolve()}")
+    print(f"\nMetrics: {metrics_path.resolve()}")
 
 
 if __name__ == "__main__":
