@@ -30,6 +30,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from data_source import FEATURES, load_data
+from report_results import format_results
 
 
 def preprocessing():
@@ -148,13 +149,7 @@ def main():
     fig.savefig(ARTIFACTS / "evaluation.png", dpi=150)
     plt.close(fig)
 
-    print(f"\nSelected model: {winner}")
-    print(f"Observed default rate: {y.mean():.2%}")
-    print(f"Test ROC-AUC: {test_selected['roc_auc']:.3f} | Average precision: {test_selected['average_precision']:.3f}")
-    for label, result in [("Threshold 0.50", test_default), (f"Threshold {threshold:.3f}", test_selected)]:
-        tn, fp, fn, tp = np.array(result["confusion_matrix"]).ravel()
-        print(f"{label}: precision {result['precision']:.1%}, recall {result['recall']:.1%}; "
-              f"missed defaults {fn}, false alarms {fp}")
+    print("\n" + format_results(report))
     print(f"Saved evaluation chart, metrics, and model to {ARTIFACTS}")
 
 
