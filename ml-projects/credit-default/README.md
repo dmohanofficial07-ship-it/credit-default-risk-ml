@@ -39,6 +39,22 @@ the published field meanings. The `ID` field is a record identifier.
 
 ## Run it
 
+**Latest experiment:** the accuracy-focused model scored **81.87%** on the
+6,000-record test benchmark. The reference model fitted on the same development
+records scored **81.70%**. This small difference does not establish a reliable
+generalization gain. See [the experiment guide](ACCURACY_EXPERIMENT.md) for the
+comparison with the original 81.83% run and the changed evaluation procedure.
+
+Display the saved experiment output without retraining:
+
+```powershell
+.\.venv\Scripts\python.exe .\ml-projects\credit-default\report_results.py --experiment
+```
+
+In VS Code, use **Terminal > Run Task > ML: show accuracy experiment results**.
+On a new checkout, complete environment setup below and run `improve_accuracy.py`
+first to generate those results. The original workflow follows below.
+
 Open **Project_Fav** in VS Code and use **Terminal > New Terminal**.
 The commands below use the existing workspace Python environment.
 
